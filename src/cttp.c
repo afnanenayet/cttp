@@ -10,6 +10,7 @@
 /****** function prototypes ******/
 
 bool arg_check(int argc, char *argv[]);
+void print_usage();
 
 /****** function definitions ******/
 
@@ -23,14 +24,21 @@ int main(int argc, char *argv[])
  * function will return true. It will also print error messages as 
  * necessary to stdout/stderr indicating which arguments are invalid
  */
-bool arg_check(int argc, char *argv[])
+bool arg_check(int argc, char **argv)
 {
     if (argc < 2) {
-        printf("not enough arguments given\n");
+        fprintf(stderr, "not enough arguments given\n");
         return false;
     } else {
-        printf("url: %s\n", argv[1]);
+        printf("url: %s%s on port %s\n", argv[1], argv[2], argv[3]);
         return true;
     }
+}
+
+/* Prints instructions on how to use the program to STDOUT
+*/
+void print_usage()
+{
+    printf("usage: cttp [base url] [extra path (optional)] [port (optional)]\n");
 }
 
