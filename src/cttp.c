@@ -17,7 +17,16 @@ void print_usage();
 int main(int argc, char *argv[])
 {
     bool run = arg_check(argc, argv);
-    return run;
+
+    // If arguments are invalid, print proper usage and exit 
+    // otherwise start main program
+    if (!run) {
+        print_usage();
+        return 1;
+    } else {
+    }
+
+    return 0;
 }
 
 /* Checks the arguments to see if they are valid or not. If they are, the 
