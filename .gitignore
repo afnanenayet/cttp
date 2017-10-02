@@ -1,6 +1,8 @@
 # Binaries
 cttp
 cttptest
+bin/
+lib/
 
 # Prerequisites
 *.d
