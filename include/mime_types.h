@@ -7,6 +7,9 @@
  * at position i + 1
  */
 
+#ifndef _mime_types_h
+#define _mime_types_h
+
 static const char *const MIME[] {
     ".html", "text/html",
     ".htm", "text/html",
@@ -18,3 +21,5 @@ static const char *const MIME[] {
     ".svg", "image/svg+xml",
     ".txt", "text/plain",
 }
+
+#endif // _mime_types_h
