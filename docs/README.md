@@ -2,12 +2,11 @@
 
 ## Synopsis
 
-`cttp` is a simple HTTP 1.0 server written in C. It was created for the sake of
+`cttp` is a simple, static HTTP 1.1 server written in C. It was created for the sake of
 personal edification. I used [RFC 2616](https://tools.ietf.org/html/rfc2616) and
 the [Wikipedia page](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) as
-references to help guide me in creating this project.
-
-I'm trying to create a server that adheres to the full HTTP 1.1 RFC.
+references to help guide me in creating this project. I also drew inspiration from
+this reddit post: https://www.reddit.com/r/dailyprogrammer/comments/6lti17/20170707_challenge_322_hard_static_http_server/
 
 ## Compilation
 
