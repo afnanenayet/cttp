@@ -1,4 +1,4 @@
-# CMAKE file for cttp
+# build file for cttp
 # Afnan Enayet
 
 cmake_minimum_required(VERSION 3.9)
