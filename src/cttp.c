@@ -1,6 +1,6 @@
 /* cttp.c   Afnan Enayet
  *
- * The main file for the cttp program. It contains the main function and logic 
+ * The main file for the cttp program. It contains the main function and logic
  * for the dispatch of cttp
  */
 
@@ -18,19 +18,20 @@ int main(int argc, char *argv[])
 {
     bool run = arg_check(argc, argv);
 
-    // If arguments are invalid, print proper usage and exit 
+    // If arguments are invalid, print proper usage and exit
     // otherwise start main program
     if (!run) {
         print_usage();
         return 1;
     } else {
+        // TODO dispatch program
     }
 
     return 0;
 }
 
-/* Checks the arguments to see if they are valid or not. If they are, the 
- * function will return true. It will also print error messages as 
+/* Checks the arguments to see if they are valid or not. If they are, the
+ * function will return true. It will also print error messages as
  * necessary to stdout/stderr indicating which arguments are invalid
  */
 bool arg_check(int argc, char **argv)
@@ -48,6 +49,6 @@ bool arg_check(int argc, char **argv)
 */
 void print_usage()
 {
-    printf("usage: cttp [base url] [extra path (optional)] [port (optional)]\n");
+    printf("usage: cttp [base url] [extra path (optional)] [port (optional, "
+            "default: 80)]\n");
 }
-
