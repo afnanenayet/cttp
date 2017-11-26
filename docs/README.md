@@ -3,20 +3,24 @@
 ## Synopsis
 
 `cttp` is a simple HTTP 1.0 server written in C. It was created for the sake of
-personal edification.
+personal edification. I used [RFC 2616](https://tools.ietf.org/html/rfc2616) and
+the [Wikipedia page](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) as
+references to help guide me in creating this project.
+
+I'm trying to create a server that adheres to the full HTTP 1.1 RFC.
 
 ## Compilation
 
-This project is written in C and uses `CMake` for basic compilation. In
+This project is written in C and uses `Cmake` for basic compilation. In
 order to compile the project:
 
     cmake . && make
 
 I run `cmake . && gmake` on MacOS because my version of GNU make tends to be
-more updated than Apple's provided binary for make.
+more updated than Apple's provided binary for make. Use whatever version of
+`make` you want.
 
 You can also use the build script on a unix-like system if you have `bash`
 installed. I haven't tested this project on Windows, but it is compiled
 using the clang C compiler, using strict C11. Since CMake is cross-platform,
-I'd imagine that `cttp` should compile on Windows.
-
+`cttp` should compile on Windows.
