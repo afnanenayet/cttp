@@ -1,5 +1,7 @@
 # cttp
 
+[![Build Status](https://travis-ci.org/afnanenayet/cttp.svg?branch=master)](https://travis-ci.org/afnanenayet/cttp)
+
 ## Synopsis
 
 `cttp` is a simple, static HTTP 1.1 server written in C. It was created for the sake of
