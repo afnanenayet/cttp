@@ -6,6 +6,13 @@ platform="unknown"
 uname_str="$(uname)"
 make="make"
 
+# if uname isn't avaiable, then print an error since we can't detect the OS 
+# string
+if ! [ -x "$(command -v uname)" ] ; then
+    uname_str="unknown"
+    echo >&2 "warning: uname binary not found, can't detect OS"
+fi
+
 # Check to see if user has cmake installed
 # otherwise print error and exit
 if ! [ -x "$(command -v cmake)" ] ; then
@@ -19,5 +26,5 @@ if [ "$uname_str" == "Darwin" ] && [ -x "$(command -v gmake)" ]; then
     make="gmake"
 fi
 
-echo "Building cttp for platform $uname_str with $make"
+echo "Building cttp for platform: $uname_str with make: $make"
 cmake . && make
