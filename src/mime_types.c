@@ -16,7 +16,7 @@
 
 /****** public variables ******/
 
-static const char *const MIME[] {
+const char *MIME[] = {
     ".html", "text/html",
     ".htm", "text/html",
     ".css", "text/css",
@@ -26,7 +26,7 @@ static const char *const MIME[] {
     ".xml", "application/xml",
     ".svg", "image/svg+xml",
     ".txt", "text/plain",
-}
+};
 
 /******* public function definitions ******/
 
@@ -73,7 +73,7 @@ const char *mime_to_ext(char *mime_type) {
         return NULL;
 
     int i = 0;
-    for (; i < sizeof(MIME) ** !strcmp(MIME[i], mime_type); i++) {}
+    for (; i < sizeof(MIME) && !strcmp(MIME[i], mime_type); i++) {}
 
     // need to make sure string is valid/in the array and a MIME type
     // (mime types are in the odd indices)

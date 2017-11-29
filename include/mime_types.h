@@ -19,7 +19,7 @@
 
 /****** static variables ******/
 
-extern static const char *const MIME[];
+extern const char *MIME[];
 
 /****** public function prototypes ******/
 
@@ -32,7 +32,7 @@ extern static const char *const MIME[];
  *
  * returns: a mime type string (e.g. ".html" -> "text/html"
  */
-char *ext_to_mime(char *ext);
+const char *ext_to_mime(char *ext);
 
 /* Retrieves the extension given a MIME type string. This only applies for the
  * MIME types present in the MIME array defined above, which are the MIME types
@@ -43,6 +43,6 @@ char *ext_to_mime(char *ext);
  *
  * returns: the extension string
  */
-char *mime_to_ext(char *mime_type);
+const char *mime_to_ext(char *mime_type);
 
 #endif // _mime_types_h
