@@ -41,3 +41,13 @@ You can also use the build script on a unix-like system if you have `bash`
 installed. I haven't tested this project on Windows, but it is compiled
 using the clang C compiler, using strict C11. Since CMake is cross-platform,
 `cttp` should compile on Windows, but it is not tested and I make no promises.
+
+## Usage
+
+`cttp [base path (required)] [address to bind to (default 127.0.0.1)] [port to bind to (default 8080)]
+
+### Return codes
+
+- 0: success/no errors
+- 1: invalid arguments
+
