@@ -1,0 +1,18 @@
+# travis automation/build script for cttp
+language: c
+
+compiler:
+  - gcc-4.8
+  - clang-3.4
+
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports
+    packages:
+      - cmake-data
+      - cmake
+
+# TODO: throw in testing as well once the testing framework is set up
+script:
+  - cmake . && make
