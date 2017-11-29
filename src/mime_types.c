@@ -14,6 +14,22 @@
 #include <string.h>  // using string instead of strings for portability
 #include "mime_types.h"
 
+/****** public variables ******/
+
+static const char *const MIME[] {
+    ".html", "text/html",
+    ".htm", "text/html",
+    ".css", "text/css",
+    ".gif", "image/gif",
+    ".png", "image/png",
+    ".jpg", "image/jpeg",
+    ".xml", "application/xml",
+    ".svg", "image/svg+xml",
+    ".txt", "text/plain",
+}
+
+/******* public function definitions ******/
+
 /* Retrieves the MIME type string given an extension. Will only work on
  * extensions present in the MIME array/for MIME types that are supported
  * by the server. Will return NULL if the extension is invalid or
@@ -23,7 +39,7 @@
  *
  * returns: a mime type string (e.g. ".html" -> "text/html"
  */
-char *ext_to_mime(char *ext) {
+const char *ext_to_mime(char *ext) {
     if (ext == NULL)
         return NULL;
 
@@ -52,7 +68,7 @@ char *ext_to_mime(char *ext) {
  *
  * returns: the extension string
  */
-char *mime_to_ext(char *mime_type) {
+const char *mime_to_ext(char *mime_type) {
     if (mime_type == NULL)
         return NULL;
 

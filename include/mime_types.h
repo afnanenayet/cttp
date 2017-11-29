@@ -19,17 +19,7 @@
 
 /****** static variables ******/
 
-static const char *const MIME[] {
-    ".html", "text/html",
-    ".htm", "text/html",
-    ".css", "text/css",
-    ".gif", "image/gif",
-    ".png", "image/png",
-    ".jpg", "image/jpeg",
-    ".xml", "application/xml",
-    ".svg", "image/svg+xml",
-    ".txt", "text/plain",
-}
+extern static const char *const MIME[];
 
 /****** public function prototypes ******/
 
