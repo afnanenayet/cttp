@@ -11,21 +11,15 @@
  *   string
  */
 
-#include <string.h>  // using string instead of strings for portability
 #include "mime_types.h"
+#include <string.h> // using string instead of strings for portability
 
 /****** public variables ******/
 
 const char *MIME[] = {
-    ".html", "text/html",
-    ".htm", "text/html",
-    ".css", "text/css",
-    ".gif", "image/gif",
-    ".png", "image/png",
-    ".jpg", "image/jpeg",
-    ".xml", "application/xml",
-    ".svg", "image/svg+xml",
-    ".txt", "text/plain",
+    ".html", "text/html",       ".htm", "text/html",     ".css", "text/css",
+    ".gif",  "image/gif",       ".png", "image/png",     ".jpg", "image/jpeg",
+    ".xml",  "application/xml", ".svg", "image/svg+xml", ".txt", "text/plain",
     NULL // terminating NULL so we don't have to keep track of array size
 };
 
@@ -49,12 +43,13 @@ const char *ext_to_mime(char *ext) {
     // MIME type for an extension is at index i + 1 if the extension is at
     // index i
     int i = 0;
-    for (; MIME[i] != NULL && !strcmp(MIME[i], ext); i++) {}
+    for (; MIME[i] != NULL && !strcmp(MIME[i], ext); i++) {
+    }
 
     // need to make sure that the string is valid/in the array and that the
     // given string is an extension
     if (strcmp(MIME[i], ext) && i % 2 == 0) {
-        return MIME[i+1];
+        return MIME[i + 1];
     } else {
         return NULL;
     }
@@ -75,14 +70,15 @@ const char *mime_to_ext(char *mime_type) {
 
     // Searching for the index of the mime type string in the array
     int i = 0;
-    for (; MIME[i] != NULL && !strcmp(MIME[i], mime_type); i++) {}
+    for (; MIME[i] != NULL && !strcmp(MIME[i], mime_type); i++) {
+    }
 
     // need to make sure string is valid/in the array and a MIME type
     // The extension precedes the mime type in the array, which is why
     // we return the string at i-1
     // (mime types are in the odd indices)
     if (strcmp(MIME[i], mime_type) && i % 2 == 1) {
-        return MIME[i-1];
+        return MIME[i - 1];
     } else {
         return NULL;
     }
