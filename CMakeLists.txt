@@ -13,12 +13,12 @@ set(TARGET_GROUP production CACHE_STRING "build target")
 # files included in both prod and testing
 # add_subdirectory(src)
 
-if(TARGET_GROUP STREQUAL release)
+#if(TARGET_GROUP STREQUAL release)
     # put files and do things that are strictly for release
-elseif(TARGET_GROUP STREQUAL test)
-    include(CTest)
+    #elseif(TARGET_GROUP STREQUAL test)
+    #include(CTest)
     # TODO finish integrating Unity test suite
-endif()
+    #endif()
 
 include_directories(include)
 file(GLOB sources "src/*.c")
