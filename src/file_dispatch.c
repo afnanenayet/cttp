@@ -35,3 +35,28 @@ bool is_valid_file(char *filepath)
     stat(filepath, &path_stat);
     return S_ISREG(path_stat.st_mode);
 }
+
+/* Will attempt to read a text file and return a string with the file's
+ * contents. Will return NULL if the file path is not valid or if any
+ * errors occur trying to read the file. The file string is malloc'd and
+ * will have to be freed.
+ */
+char *read_file_to_str(char *filepath)
+{
+    // if it's not a valid file, don't bother reading it
+    if (!is_valid_file(filepath))
+        return NULL;
+
+    FILE *fp = fopen(filepath, "rb");
+
+    // getting length of the file so we know how much memory to allocate
+    fseek(filepath, 0, SEEK_END);
+    size_t file_size = ftell(filepath);
+    rewind(input_file); // rewind to read from the beginning
+
+    // read file into allocated buffer
+    char *file_str = calloc(file_size, sizeof(char));
+    fread(file_str, sizeof(char), file_size, filepath);
+    close(fp);
+    return file_str;
+}
