@@ -115,7 +115,7 @@ static char *network_request_str(int sock_fd)
         return NULL;
 
     // 64K buffer for reading network request
-    char *buf = calloc(64000, sizeof(char));
+    char *buf = calloc(REQ_BUF_SIZE, sizeof(char));
     struct sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
 
@@ -131,7 +131,7 @@ static char *network_request_str(int sock_fd)
     }
 
     // Otherwise, read into buffer
-    int n = read(incoming_sock_fd, buf, 2048);
+    int n = read(incoming_sock_fd, buf, REQ_BUF_SIZE-1);
 
     // if we were able to read, return the string, otherwise free the buffer
     // and return NULL, indicating an error
