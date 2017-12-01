@@ -34,7 +34,8 @@ const char *MIME[] = {
  *
  * returns: a mime type string (e.g. ".html" -> "text/html"
  */
-const char *ext_to_mime(char *ext) {
+const char *ext_to_mime(char *ext)
+{
     if (ext == NULL)
         return NULL;
 
@@ -64,7 +65,8 @@ const char *ext_to_mime(char *ext) {
  *
  * returns: the extension string
  */
-const char *mime_to_ext(char *mime_type) {
+const char *mime_to_ext(char *mime_type)
+{
     if (mime_type == NULL)
         return NULL;
 

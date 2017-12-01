@@ -14,7 +14,8 @@ void print_usage();
 
 /****** function definitions ******/
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     bool run = arg_check(argc, argv);
 
     // If arguments are invalid, print proper usage and exit
@@ -33,7 +34,8 @@ int main(int argc, char *argv[]) {
  * function will return true. It will also print error messages as
  * necessary to stdout/stderr indicating which arguments are invalid
  */
-bool arg_check(int argc, char **argv) {
+bool arg_check(int argc, char **argv)
+{
     if (argc < 2) {
         fprintf(stderr, "not enough arguments given\n");
         return false;
@@ -45,7 +47,8 @@ bool arg_check(int argc, char **argv) {
 
 /* Prints instructions on how to use the program to STDOUT
 */
-void print_usage() {
+void print_usage()
+{
     printf("usage: cttp [base url] [extra path (optional)] [port (optional, "
             "default: 80)]\n");
 }
