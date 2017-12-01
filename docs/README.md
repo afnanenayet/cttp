@@ -26,7 +26,7 @@ The binary gets placed in a folder called `bin`
 
 ## Compilation
 
-This project is written in C and uses `Cmake` for basic compilation. In
+This project is written in C and uses `cmake` for basic compilation. In
 order to compile the project you can either run the build script which will
 automatically try to invoke gmake since it's more recent.
 
@@ -44,10 +44,12 @@ using the clang C compiler, using strict C11. Since CMake is cross-platform,
 
 ## Usage
 
-`cttp [base path (required)] [address to bind to (default 127.0.0.1)] [port to bind to (default 8080)]
+`cttp [base path (required)] [port to bind to (default 8080)]`
 
 ### Return codes
 
 - 0: success/no errors
 - 1: invalid arguments
 
+Note that this program will follow symbolic links, both for requests and when
+specifiying the base path in the arguments.
