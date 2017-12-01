@@ -9,8 +9,10 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "cttp_server.h"
+#include "file_dispatch.h"
 
 /****** constants ******/
+
 const int DEF_PORT = 8080;
 
 /****** function prototypes ******/
@@ -24,6 +26,7 @@ static int str_to_port(char *port_str);
 int main(int argc, char *argv[])
 {
     bool run = arg_check(argc, argv);
+    int ret_code = 0;  // return code from server
 
     // If arguments are invalid, print proper usage and exit
     // otherwise start main program
@@ -31,16 +34,18 @@ int main(int argc, char *argv[])
         print_usage();
         return 1;
     } else {
-        int port = str_to_port(argv[2]);
+        int port = DEF_PORT;
+
+        // set port to supplied port per user's request
+        if (argc > 2)
+            port = str_to_port(argv[2]);
 
         // with error, set to default port value
         if (port == -1)
             port = DEF_PORT;
-
-        cttp_server_run(port, NULL);
+        ret_code = cttp_server_run(port, argv[1]);
     }
-
-    return 0;
+    return ret_code;
 }
 
 /* Checks the arguments to see if they are valid or not. If they are, the
@@ -49,13 +54,24 @@ int main(int argc, char *argv[])
  */
 static bool arg_check(int argc, char **argv)
 {
-    if (argc < 3) {
+    if (argc < 2) {
         fprintf(stderr, "not enough arguments given\n");
         return false;
-    } else {
+    } else if (!is_valid_dir(argv[1])) {
+        fprintf(stderr, "supplied base path is not a valid directory\n");
+        return false;
+    } else if (argc >= 3) {
         // see if we can convert port str to integer, if it is not a valid
         // number, this is an error
-        return str_to_port(argv[2]) != -1;
+        int port = str_to_port(argv[2]) != -1;
+
+        if (port == -1) {
+            fprintf(stderr, "invalid port provided\n");
+            return false;
+        } else
+            return true;
+    } else {
+        return true;
     }
 }
 
@@ -67,7 +83,7 @@ static void print_usage()
             "default: 80)]\n");
 }
 
-/* given a string representing the port, returns the representation 
+/* given a string representing the port, returns the representation
  * of the port or returns -1 if the string is not parseable
  */
 static int str_to_port(char *port_str)
