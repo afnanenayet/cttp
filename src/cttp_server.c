@@ -85,20 +85,20 @@ static char *ip_addr_str(struct sockaddr_in *addr)
 
     // determining whether socket address is IPv4 or IPv6
     switch(addr->sin_family) {
-    case AF_INET: {
-        struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;
-        ip_str = malloc(INET_ADDRSTRLEN);
-        inet_ntop(AF_INET, &(addr_in->sin_addr), ip_str, INET_ADDRSTRLEN);
-        break;
-    }
-    case AF_INET6: {
-        struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *) addr;
-        ip_str = malloc(INET6_ADDRSTRLEN);
-        inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str, INET6_ADDRSTRLEN);
-        break;
-    }
-    default:
-        break;
+        case AF_INET: {
+                          struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;
+                          ip_str = malloc(INET_ADDRSTRLEN);
+                          inet_ntop(AF_INET, &(addr_in->sin_addr), ip_str, INET_ADDRSTRLEN);
+                          break;
+                      }
+        case AF_INET6: {
+                           struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *) addr;
+                           ip_str = malloc(INET6_ADDRSTRLEN);
+                           inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str, INET6_ADDRSTRLEN);
+                           break;
+                       }
+        default:
+                       break;
     }
 
     return ip_str;
@@ -168,4 +168,3 @@ int cttp_server_run(int port, const char *root)
     }
     return 0;
 }
-

@@ -19,9 +19,9 @@
  */
 bool is_valid_dir(char *dirname);
 
-/* Returns a boolean value indicating whether a given file path points to a 
- * valid file. Will return false if the filepath is NULL, if the file path 
- * does not point to an actual file, or if the file cannot be accessed for any 
+/* Returns a boolean value indicating whether a given file path points to a
+ * valid file. Will return false if the filepath is NULL, if the file path
+ * does not point to an actual file, or if the file cannot be accessed for any
  * reason.
  */
 bool is_valid_file(char *filepath);
