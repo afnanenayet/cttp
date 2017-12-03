@@ -6,6 +6,8 @@
 #ifndef _REQUEST_PARSE_H
 #define _REQUEST_PARSE_H
 
+/****** public constants ******/
+
 enum HTTP_TYPE
 {
     GET,
@@ -13,6 +15,8 @@ enum HTTP_TYPE
     POST,
     ERROR
 } http_type;
+
+/****** public function prototypes ******/
 
 /* given a string representing an HTTP request, this function returns the
  * type of that HTTP request. If there is an error in the function, or if the
