@@ -17,6 +17,9 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <signal.h>
+#include "request_parse.h"
+#include "return_codes.h"
 #include "cttp_server.h"
 
 /****** private constants ******/
@@ -33,14 +36,42 @@ struct socket_sockfd {
     int sockfd;
 };
 
+// For historical reasons, the signal handling callback function cannot accept
+// any parameters, so we need to store some data in a static struct
+// stat = 0 while running, 1 if we need to stop
+struct cttp_server_vars {
+    sig_atomic_t stat;
+    int client_sock;
+};
+
+/****** private globals ******/
+
+static struct cttp_server_vars server;
+
 /****** private function prototypes ******/
 
+static void sig_handler(int signum);
 static int bind_addr(int port);
-static bool unbind_addr(struct socket_sockfd *server_addr);
+static bool unbind_addr(int sock_fd);
 static char *ip_addr_str(struct sockaddr_in *addr);
 static char *network_request_string(int sockfd);
 
 /****** private function definitions ******/
+
+/* takes care of closing the program if there is an interrupt
+ */
+static void sig_handler(int signum)
+{
+    close(server.client_sock);
+    server.stat = 1;
+}
+
+/* Attempts to unbind a socket to terminate a connection
+ */
+static bool unbind_addr(int sock_fd)
+{
+    return (close(sock_fd) == 0);
+}
 
 /* Binds a socket for the server so it can listen for and accept TCP
  * connections. Will return -1 if there is an error/if it fails to
@@ -116,18 +147,23 @@ static char *network_request_str(int sock_fd)
     if (sock_fd < 0)
         return NULL;
 
-    // 64K buffer for reading network request
-    char *buf = calloc(REQ_BUF_SIZE, sizeof(char));
     struct sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
-
+    server.client_sock = sock_fd; // set global so the connection can be killed
     listen(sock_fd, 5);  // start listening
 
+    if (server.stat != 0)
+        return NULL;
+
+    // 64K buffer for reading network request
+    // Allocating this down here because if program is terminated beforehand,
+    // we don't need to allocate it at all
+    char *buf = calloc(REQ_BUF_SIZE, sizeof(char));
     int incoming_sock_fd = accept(sock_fd, (struct sockaddr *) &client_addr,
             &client_len);
 
-    // Check that the incoming socket was accepted correctly
-    if (incoming_sock_fd < 0) {
+    if (incoming_sock_fd < 0 || server.stat != 0) {
+        free(buf);
         fprintf(stderr, "error accepting socket\n");
         return NULL;
     }
@@ -153,19 +189,37 @@ static char *network_request_str(int sock_fd)
  */
 int cttp_server_run(int port, const char *root)
 {
+    // signal handling so this can be interrupted
+    server.stat = 0;
+    struct sigaction sa;
+    sa.sa_handler = sig_handler;
+    sigemptyset(&sa.sa_mask);
+
     // Start by binding to a TCP port and listening for connections
     int server_sock_fd = bind_addr(port);
 
+    // terminate if we could not bind to the socket
+    if (server_sock_fd < 0)
+        return RET_NET_ERROR;
+
     // Listen for incoming connections
     // TODO, spawn new thread for each network request
-    for (;;) {
+    while (server.stat == 0) {
         char *req = network_request_str(server_sock_fd);
 
         // NULL indicates error reading request
         if (req != NULL) {
+            char *base_path = get_req_path(GET, req);
             printf("network request received:\n\n%s", req);
+            printf("path requested: %s\n", base_path);
+            free(base_path);
             free(req);
         }
     }
-    return 0;
+
+    if (unbind_addr(server_sock_fd)) {
+        return 0;
+    } else {
+        return RET_UNK_ERROR;
+    }
 }
