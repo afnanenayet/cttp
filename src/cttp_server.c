@@ -91,14 +91,15 @@ static char *ip_addr_str(struct sockaddr_in *addr)
                           inet_ntop(AF_INET, &(addr_in->sin_addr), ip_str, INET_ADDRSTRLEN);
                           break;
                       }
-        case AF_INET6: {
-                           struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *) addr;
-                           ip_str = malloc(INET6_ADDRSTRLEN);
-                           inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str, INET6_ADDRSTRLEN);
-                           break;
-                       }
+        case AF_INET6:
+                      {
+                          struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *) addr;
+                          ip_str = malloc(INET6_ADDRSTRLEN);
+                          inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str, INET6_ADDRSTRLEN);
+                          break;
+                      }
         default:
-                       break;
+                      break;
     }
 
     return ip_str;
