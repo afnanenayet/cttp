@@ -66,6 +66,7 @@ static int arg_check(int argc, char **argv)
         fprintf(stderr, "not enough arguments given\n");
         return 1;
     } else if (!is_valid_dir(argv[1])) {
+        // if only one arg is supplied it has to be a valid dir
         fprintf(stderr, "supplied base path is not a valid directory\n");
         return 3;
     } else if (argc >= 3) {
