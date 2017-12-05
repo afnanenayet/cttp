@@ -79,7 +79,7 @@ static int arg_check(int argc, char **argv)
         } else
             return 0;
     } else {
-        return true;
+        return 0;
     }
 }
 
