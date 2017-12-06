@@ -72,7 +72,7 @@ static int arg_check(int argc, char **argv)
     } else if (argc >= 3) {
         // see if we can convert port str to integer, if it is not a valid
         // number, this is an error
-        int port = str_to_port(argv[2]) != -1;
+        int port = str_to_port(argv[2]);
 
         if (port == -1) {
             fprintf(stderr, "invalid port provided\n");
