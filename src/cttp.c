@@ -49,6 +49,6 @@ int main(int argc, char *argv[])
 */
 static void print_usage()
 {
-    printf("usage: cttp [base path] [port (optional, "
-            "default: 80)]\n");
+    printf("usage: cttp -r [base path] -p [port (optional, "
+            "default: 8080)]\n");
 }
