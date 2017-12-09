@@ -59,4 +59,5 @@ char *create_http_response(char *fp_str)
 
     // get the string representation of the file, if the file is valid
     char *file_str = read_file_to_str(fp_str);
+    return resp;
 }
