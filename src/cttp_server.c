@@ -218,6 +218,6 @@ int cttp_server_run(int port, const char *root)
     if (unbind_addr(server_sock_fd)) {
         return 0;
     } else {
-        return RET_UNK_ERROR;
+        return RET_NET_ERROR;
     }
 }
