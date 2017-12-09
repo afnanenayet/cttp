@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "mime_types.h"
 #include "file_dispatch.h"
 
 /* Returns a boolean value indicating whether a given directory name is a
@@ -61,4 +62,31 @@ char *read_file_to_str(char *filepath)
     fread(file_str, sizeof(char), file_size, fp);
     fclose(fp);
     return file_str;
+}
+
+/* retrieves the MIME-type from a file path string (simply checks the
+ * extension in the file path string). The string returned here is static
+ * and IS NOT allocated, and thus will not need to be freed. Will return
+ * NULL if the string is not a valid file extension (e.g. a file extension
+ * that's supposrted by the server).
+ */
+char *get_mime_from_file(char *fp_str)
+{
+    if (fp_str == NULL)
+        return NULL;
+
+    char *delim = ".";
+    char *fp_copy = malloc(sizeof(char) * (strlen(fp_str) + 1));
+    strcpy(fp_copy, fp_str);
+    char *ext;
+    char *curr_tok = strtok(fp_copy, delim);
+
+    // loop through ever "." in the string and see if it has a match in
+    // the MIME helper. This should leave us with the last extension
+    while (curr_tok != NULL) {
+        ext = ext_to_mime(curr_tok);
+        strtok(NULL, delim);
+    }
+    free(fp_copy);
+    return ext;
 }

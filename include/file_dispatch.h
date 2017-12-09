@@ -26,4 +26,19 @@ bool is_valid_dir(char *dirname);
  */
 bool is_valid_file(char *filepath);
 
+/* Will attempt to read a text file and return a string with the file's
+ * contents. Will return NULL if the file path is not valid or if any
+ * errors occur trying to read the file. The file string is malloc'd and
+ * will have to be freed.
+ */
+char *read_file_to_str(char *filepath);
+
+/* retrieves the MIME-type from a file path string (simply checks the
+ * extension in the file path string). The string returned here is static
+ * and IS NOT allocated, and thus will not need to be freed. Will return
+ * NULL if the string is not a valid file extension (e.g. a file extension
+ * that's supposrted by the server).
+ */
+char *get_mime_from_file(char *fp_str)
+
 #endif  // _FILE_DISPATCH_H
