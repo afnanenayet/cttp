@@ -85,7 +85,6 @@ static int bind_addr(int port)
 
     // failed to open socket
     if (sock_fd < 0) {
-        // TODO return some sort of error
         fprintf(stderr, "failed to open socket\n");
         return -1;
     }
@@ -98,7 +97,6 @@ static int bind_addr(int port)
     // if < 0, then socket failed to bind
     if (bind(sock_fd, (struct sockaddr*) &server_addr,
                 sizeof(server_addr)) < 0) {
-        // TODO print error that socket failed to bind
         fprintf(stderr, "socket failed to bind\n");
         return -1;
     } else {
