@@ -6,7 +6,7 @@ platform="unknown"
 uname_str="$(uname)"
 make="make"
 
-# if uname isn't avaiable, then print an error since we can't detect the OS 
+# if uname isn't avaiable, then print an error since we can't detect the OS
 # string
 if ! [ -x "$(command -v uname)" ] ; then
     uname_str="unknown"
