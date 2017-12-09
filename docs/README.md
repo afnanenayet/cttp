@@ -8,7 +8,7 @@
 personal edification. I used [RFC 2616](https://tools.ietf.org/html/rfc2616) and
 the [Wikipedia page](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) as
 references to help guide me in creating this project. I also drew inspiration from
-this reddit post: https://www.reddit.com/r/dailyprogrammer/comments/6lti17/20170707_challenge_322_hard_static_http_server/
+this [reddit post](https://www.reddit.com/r/dailyprogrammer/comments/6lti17/20170707_challenge_322_hard_static_http_server/)
 
 ### Structure
 
