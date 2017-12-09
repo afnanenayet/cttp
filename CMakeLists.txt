@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.2)
 project(cttp C)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_BUILD_TYPE Debug)
 # Output to certain folders
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
