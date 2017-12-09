@@ -44,7 +44,12 @@ using the clang C compiler, using strict C11. Since CMake is cross-platform,
 
 ## Usage
 
-`cttp [base path (required)] [port to bind to (default 8080)]`
+`cttp -p [port] -r [base path]`
+
+- `-p`: the port that the HTTP server will be deployed to. It is optional,
+and defaults to port `8080`
+- `-r`: the base path to serve files from. This must be a valid file and is
+a required argument.
 
 ### Return codes
 
