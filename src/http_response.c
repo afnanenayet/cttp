@@ -4,7 +4,9 @@
  * to send to an HTTP client.
  */
 
+#include <stdlib.h>
 #include <string.h>
+#include "file_dispatch.h"
 #include "http_response.h"
 
 /****** private function prototypes ******/
@@ -46,7 +48,7 @@ char *create_http_response(char *fp_str)
         return NULL;
 
     if (!is_valid_file(fp_str))
-        return NULL
+        return NULL;
 
     // The constants/template for each line of the HTTP response
     char *status = "HTTP/1.1 200 OK ";
@@ -59,5 +61,7 @@ char *create_http_response(char *fp_str)
 
     // get the string representation of the file, if the file is valid
     char *file_str = read_file_to_str(fp_str);
+
+    // TODO fill in the rest of the response
     return resp;
 }
