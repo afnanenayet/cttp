@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <string.h>
 #include "mime_types.h"
 #include "file_dispatch.h"
 
@@ -84,7 +85,7 @@ char *get_mime_from_file(char *fp_str)
     // loop through ever "." in the string and see if it has a match in
     // the MIME helper. This should leave us with the last extension
     while (curr_tok != NULL) {
-        ext = ext_to_mime(curr_tok);
+        ext = (char*) ext_to_mime(curr_tok);
         strtok(NULL, delim);
     }
     free(fp_copy);
