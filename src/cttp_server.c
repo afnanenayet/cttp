@@ -20,6 +20,8 @@
 #include <signal.h>
 #include "request_parse.h"
 #include "return_codes.h"
+#include "file_dispatch.h"
+#include "http_response.h"
 #include "cttp_server.h"
 
 /****** private constants ******/
@@ -210,6 +212,22 @@ int cttp_server_run(int port, const char *root)
             char *base_path = get_req_path(GET, req);
             printf("network request received:\n\n%s", req);
             printf("path requested: %s\n", base_path);
+
+            // find the file if it's valid, then serve it as a response
+            // concatenate base path with new path
+            char *new_path = malloc(strlen(root) + strlen(base_path) + 2);
+            strcpy(new_path, root);
+            strcat(new_path, base_path);
+
+            char *resp = create_http_response(new_path);
+
+            // if we have a valid response, send it to the client
+            if (resp != NULL) {
+                write(server.client_sock, resp, sizeof(resp));
+                free(resp);
+            }
+
+            close(server.client_sock);
             free(base_path);
             free(req);
         }
