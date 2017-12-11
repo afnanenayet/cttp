@@ -225,7 +225,7 @@ int cttp_server_run(int port, const char *root)
 
             // if we have a valid response, send it to the client
             if (resp != NULL) {
-                printf("\n...File sent\n");
+                printf("...File sent\n");
                 write(server.client_sock, resp, strlen(resp) + 1);
                 free(resp);
             }
