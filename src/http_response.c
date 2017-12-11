@@ -4,14 +4,17 @@
  * to send to an HTTP client.
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "file_dispatch.h"
 #include "http_response.h"
 
 /****** private function prototypes ******/
 
 static char *concat_str_end(char *template, char *text);
+static int num_digits(int num);
 
 /****** private function definitions ******/
 
@@ -35,6 +38,16 @@ static char *concat_str_end(char *template, char *text)
     return res;
 }
 
+/* Returns the number of digits in a number
+ */
+static int num_digits(int num)
+{
+    if (num == 0)
+        return 1;
+    else
+        return floor(log10(abs(num))) + 1;
+}
+
 /****** public function definitions ******/
 
 /* Creates an HTTP response from a file path string. If the argument is
@@ -51,10 +64,9 @@ char *create_http_response(char *fp_str)
         return NULL;
 
     // The constants/template for each line of the HTTP response
-    char *status = "HTTP/1.1 200 OK ";
-    char *content_len = "Content-Length: ";
-    char *content_type = "Content-Type: ";
-    char *date = "Date: ";
+    char *header = "HTTP/1.1 200 OK \r\n"
+        "Content-Type: text/plain \r\n"
+        "Content-Length: ";
 
     // the HTTP response string to be returned
     char *resp;
@@ -62,6 +74,23 @@ char *create_http_response(char *fp_str)
     // get the string representation of the file, if the file is valid
     char *file_str = read_file_to_str(fp_str);
 
-    // TODO fill in the rest of the response
-    return resp;
+    if (file_str != NULL) {
+        // concatenate the two strings (header and content)
+        char *sep = "\r\n\r\n";
+        int content_len = strlen(file_str) + strlen(sep);
+        int num_len = num_digits(content_len + 1);
+
+        resp = malloc(sizeof(char) * (
+                    strlen(header) + 1 +
+                    strlen(file_str) + 1 +
+                    strlen(sep) + 1 +
+                    strlen(sep) + 1 +
+                    num_len + 1
+                ));
+        sprintf(resp, "%s%d%s%s%s", header, content_len, sep, file_str, sep);
+        free(file_str);
+        return resp;
+    } else {
+        return NULL;
+    }
 }
