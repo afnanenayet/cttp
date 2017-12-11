@@ -149,7 +149,6 @@ static char *network_request_str(int sock_fd)
 
     struct sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
-    server.client_sock = sock_fd; // set global so the connection can be killed
     listen(sock_fd, 5);  // start listening
 
     if (server.stat != 0)
@@ -167,6 +166,10 @@ static char *network_request_str(int sock_fd)
         fprintf(stderr, "error accepting socket\n");
         return NULL;
     }
+
+    // Set global so that the socket can be closed outside of this function
+    // on SIGTERM or after writing a response
+    server.client_sock = incoming_sock_fd;
 
     // Otherwise, read into buffer
     int n = read(incoming_sock_fd, buf, REQ_BUF_SIZE-1);
@@ -210,20 +213,20 @@ int cttp_server_run(int port, const char *root)
         // NULL indicates error reading request
         if (req != NULL) {
             char *base_path = get_req_path(GET, req);
-            printf("network request received:\n\n%s", req);
-            printf("path requested: %s\n", base_path);
 
             // find the file if it's valid, then serve it as a response
             // concatenate base path with new path
-            char *new_path = malloc(strlen(root) + strlen(base_path) + 2);
-            strcpy(new_path, root);
-            strcat(new_path, base_path);
+            char *full_fp_str = malloc(strlen(root) + strlen(base_path) + 2);
+            strcpy(full_fp_str, root);
+            strcat(full_fp_str, base_path);
 
-            char *resp = create_http_response(new_path);
+            printf("File %s requested...\n", full_fp_str);
+            char *resp = create_http_response(full_fp_str);
 
             // if we have a valid response, send it to the client
             if (resp != NULL) {
-                write(server.client_sock, resp, sizeof(resp));
+                printf("\n...File sent\n");
+                write(server.client_sock, resp, strlen(resp) + 1);
                 free(resp);
             }
 
