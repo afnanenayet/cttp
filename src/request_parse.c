@@ -27,7 +27,7 @@ enum HTTP_TYPE get_http_type(char *req)
     char *tok = strtok(DELIM, cpy);
 
     // the http request type is the first word in the request string
-    if (strcmp(tok, "GET")) {
+    if (tok != NULL && strcmp(tok, "GET")) {
         return GET;
     } else if (strcmp(tok, "PUT")) {
         return PUT;
@@ -58,7 +58,13 @@ char *get_req_path(enum HTTP_TYPE http_type, char *req)
 
     // second token should be the path
     char *tok = strtok(req, DELIM);
-    tok = strtok(NULL, DELIM);
+
+    // just in case we get a faulty request
+    if (tok != NULL)
+        tok = strtok(NULL, DELIM);
+    else
+        return NULL;
+
 
     if (tok != NULL) {
         path = calloc(sizeof(char), strlen(tok));
