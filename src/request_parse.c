@@ -28,7 +28,7 @@ enum HTTP_TYPE get_http_type(char *req)
 
     // Make sure that there is at least one instane of a ' '
     if (tok == NULL)
-        return NULL;
+        return ERROR;
 
     // the http request type is the first word in the request string
     if (strcmp(tok, "GET")) {
