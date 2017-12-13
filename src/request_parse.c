@@ -55,8 +55,8 @@ char *get_req_path(enum HTTP_TYPE http_type, char *req)
 
     // This is a shim since this function doesn't support any other request
     // types :: TODO support other requests
-    if (http_type != GET) {
-        fprintf(stderr, "unsupported HTTP request type\n");
+    if (http_type == ERROR) {
+        fprintf(stderr, "unsupported or invallid HTTP request type\n");
         return NULL;
     }
 
