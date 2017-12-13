@@ -26,8 +26,11 @@ enum HTTP_TYPE get_http_type(char *req)
 
     char *tok = strtok(DELIM, cpy);
 
+    if (tok == NULL)
+        return NULL;
+
     // the http request type is the first word in the request string
-    if (tok != NULL && strcmp(tok, "GET")) {
+    if (strcmp(tok, "GET")) {
         return GET;
     } else if (strcmp(tok, "PUT")) {
         return PUT;
