@@ -19,6 +19,7 @@
 const int DEF_PORT = 8080;
 
 /****** private function prototypes ******/
+
 static void print_usage();
 
 /****** public function definitions ******/
@@ -50,5 +51,5 @@ int main(int argc, char *argv[])
 static void print_usage()
 {
     printf("usage: cttp -r [base path] -p [port (optional, "
-            "default: 8080)]\n");
+            "default: %d)]\n", DEF_PORT);
 }
