@@ -43,6 +43,8 @@ installed. I haven't tested this project on Windows, but it is compiled
 using the clang C compiler, using strict C11. Since CMake is cross-platform,
 `cttp` should compile on Windows, but it is not tested and I make no promises.
 
+This project uses [cmocka](https://cmocka.org) for unit testing.
+
 ## Usage
 
 `cttp -p [port] -r [base path]`
