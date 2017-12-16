@@ -16,7 +16,7 @@ foreach(test_file ${sources})
     add_executable(${test_name} ${test_file})
     add_dependencies(${test_name} ${test_name})
     add_test(NAME ${test_name} COMMAND ${test_name} WORKING_DIRECTORY ${TEST_OUTPUT_DIR})
-    target_link_libraries(${test_name} cttpfn cmocka)
+    target_link_libraries(${test_name} cttpfn cmocka m)
     set_target_properties(
         ${test_name}
         PROPERTIES

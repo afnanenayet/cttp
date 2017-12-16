@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.2)
 project(cttp C)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_BUILD_TYPE Debug)
+set(program_name cttp)
 include(CTest)
 
 # Output to certain folders
@@ -20,8 +21,9 @@ add_subdirectory(test)
 include_directories(include)
 
 file(GLOB sources "src/*.c")
-add_executable(cttp ${sources})
-set_property(TARGET cttp PROPERTY C_STANDARD 11)
+add_executable(${program_name} ${sources})
+target_link_libraries(${program_name} m)
+set_property(TARGET ${program_name} PROPERTY C_STANDARD 11)
 
 list(REMOVE_ITEM sources ${PROJECT_SOURCE_DIR}/src/cttp.c)
 add_library(cttpfn ${sources})
