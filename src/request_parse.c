@@ -21,25 +21,30 @@ char *DELIM = " ";
 enum HTTP_TYPE get_http_type(char *req)
 {
     // copy the string so we don't destroy the original string
-    char *cpy = calloc(sizeof(char), strlen(req));
+    char *cpy = calloc(strlen(req), sizeof(char));
     strcpy(cpy, req);
+    // save result here so we can free the string before returning result
+    enum HTTP_TYPE ret; 
 
     char *tok = strtok(DELIM, cpy);
 
     // Make sure that there is at least one instance of a ' '
     if (tok == NULL)
-        return ERROR;
+        ret = ERROR;
 
     // the http request type is the first word in the request string
     if (strcmp(tok, "GET")) {
-        return GET;
+        ret = GET;
     } else if (strcmp(tok, "PUT")) {
-        return PUT;
+        ret = PUT;
     } else if (strcmp(tok, "POST")) {
-        return POST;
+        ret = POST;
     } else {
-        return ERROR;
+        ret = ERROR;
     }
+
+    free(cpy);
+    return ret;
 }
 
 /* Given the HTTP type of the request and a request string, this funciton
