@@ -26,7 +26,7 @@ enum HTTP_TYPE get_http_type(char *req)
 
     char *tok = strtok(DELIM, cpy);
 
-    // Make sure that there is at least one instane of a ' '
+    // Make sure that there is at least one instance of a ' '
     if (tok == NULL)
         return ERROR;
 
