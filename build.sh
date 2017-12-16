@@ -27,4 +27,5 @@ if [ "$uname_str" == "Darwin" ] && [ -x "$(command -v gmake)" ]; then
 fi
 
 echo "Building cttp for platform: $uname_str with make: $make"
-cmake . && make
+
+cmake . && "$make" -j
