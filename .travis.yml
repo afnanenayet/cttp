@@ -11,6 +11,8 @@ addons:
     packages:
       - cmake-data
       - cmake
+      - cmocka
+      - libcmocka-dev
 
 # TODO: throw in testing as well once the testing framework is set up
 script:
