@@ -7,13 +7,19 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/include"
 )
 
-add_executable(file_dispatch_test file_dispatch_test.c)
-add_dependencies(file_dispatch_test file_dispatch_test)
-add_test(NAME file_dispatch_test COMMAND file_dispatch_test WORKING_DIRECTORY ${TEST_OUTPUT_DIR})
-target_link_libraries(file_dispatch_test cttpfn cmocka)
+file(GLOB sources "src/*_test.c")
 
-set_target_properties(
-    file_dispatch_test
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR}
-)
+# create a test for each test file in sources
+foreach(test_file ${sources})
+    get_filename_component(test_name ${test_file} NAME_WE)
+
+    add_executable(${test_name} ${test_file})
+    add_dependencies(${test_name} ${test_name})
+    add_test(NAME ${test_name} COMMAND ${test_name} WORKING_DIRECTORY ${TEST_OUTPUT_DIR})
+    target_link_libraries(${test_name} cttpfn cmocka)
+    set_target_properties(
+        ${test_name}
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR}
+        )
+endforeach(test_file)
