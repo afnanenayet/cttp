@@ -68,6 +68,7 @@ static void get_req_path_test()
     for (int i = 0; i < num_good_inputs; i++) {
         char *path = get_req_path(GET, inputs[i]);
         assert_string_equal(path, expected[i]);
+        free(path);
     }
 
     const int num_bad_inputs = 8;
@@ -83,7 +84,7 @@ static void get_req_path_test()
         "badinput",
         "GET ",
     };
-    
+
     for (int i = 0; i < num_bad_inputs; i++) {
         assert_null(get_req_path(GET, bad_inputs[i]));
     }
@@ -95,6 +96,7 @@ int main(void)
     {
         cmocka_unit_test(get_http_type_get_test),
         cmocka_unit_test(get_http_type_put_test),
+        cmocka_unit_test(get_req_path_test),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
