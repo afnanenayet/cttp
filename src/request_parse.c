@@ -56,30 +56,39 @@ enum HTTP_TYPE get_http_type(char *req)
  */
 char *get_req_path(enum HTTP_TYPE http_type, char *req)
 {
+    if (req == NULL)
+        return NULL;
+
+    // Must copy the request string because fn will modify the string
+    // and we don't know if req is a string literal or not
+    char *req_cpy = malloc(sizeof(char) * (strlen(req) + 1));
+    strcpy(req_cpy, req);
     char *path = NULL; // the path to be returned to the user
 
-    // This is a shim since this function doesn't support any other request
-    // types :: TODO support other requests
     if (http_type == ERROR) {
         fprintf(stderr, "unsupported or invallid HTTP request type\n");
         return NULL;
     }
 
     // second token should be the path
-    char *tok = strtok(req, DELIM);
+    char *tok = strtok(req_cpy, DELIM);
 
     // just in case we get a faulty request
     if (tok != NULL)
         tok = strtok(NULL, DELIM);
-    else
+    else {
+        free(req_cpy);
         return NULL;
+    }
 
 
     if (tok != NULL) {
-        path = calloc(sizeof(char), strlen(tok));
+        path = calloc(strlen(tok) + 1, sizeof(char));
         strcpy(path, tok);
+        free(req_cpy);
         return path;
     } else {
+        free(req_cpy);
         return NULL;
     }
 }
