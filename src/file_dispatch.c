@@ -71,23 +71,26 @@ char *read_file_to_str(char *filepath)
  * NULL if the string is not a valid file extension (e.g. a file extension
  * that's supposrted by the server).
  */
-char *get_mime_from_file(char *fp_str)
+const char *get_mime_from_file(char *fp_str)
 {
     if (fp_str == NULL)
         return NULL;
 
     char *delim = ".";
+
+    // copying the string because strtok is destructive
     char *fp_copy = malloc(sizeof(char) * (strlen(fp_str) + 1));
     strcpy(fp_copy, fp_str);
-    char *ext;
-    char *curr_tok = strtok(fp_copy, delim);
+    char *tok = strtok(fp_copy, delim);
+    char *next;
 
     // loop through ever "." in the string and see if it has a match in
     // the MIME helper. This should leave us with the last extension
-    while (curr_tok != NULL) {
-        ext = (char*) ext_to_mime(curr_tok);
-        strtok(NULL, delim);
+    while (next != NULL) {
+        tok = next;
+        next = strtok(NULL, delim);
     }
+    const char *mime = ext_to_mime(tok);
     free(fp_copy);
-    return ext;
+    return mime;
 }

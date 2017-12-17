@@ -39,6 +39,6 @@ char *read_file_to_str(char *filepath);
  * NULL if the string is not a valid file extension (e.g. a file extension
  * that's supposrted by the server).
  */
-char *get_mime_from_file(char *fp_str);
+const char *get_mime_from_file(char *fp_str);
 
 #endif  // _FILE_DISPATCH_H
