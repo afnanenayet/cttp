@@ -44,8 +44,7 @@ const char *ext_to_mime(char *ext)
     // MIME type for an extension is at index i + 1 if the extension is at
     // index i
     int i = 0;
-    for (; MIME[i] != NULL && !strcmp(MIME[i], ext); i++) {
-    }
+    for (; MIME[i] != NULL && strcmp(MIME[i], ext) != 0; i++) { }
 
     // need to make sure that the string is valid/in the array and that the
     // given string is an extension
@@ -72,14 +71,13 @@ const char *mime_to_ext(char *mime_type)
 
     // Searching for the index of the mime type string in the array
     int i = 0;
-    for (; MIME[i] != NULL && !strcmp(MIME[i], mime_type); i++) {
-    }
+    for (; MIME[i] != NULL && strcmp(MIME[i], mime_type) != 0; i++) { }
 
     // need to make sure string is valid/in the array and a MIME type
     // The extension precedes the mime type in the array, which is why
     // we return the string at i-1
     // (mime types are in the odd indices)
-    if (strcmp(MIME[i], mime_type) && i % 2 == 1) {
+    if (strcmp(MIME[i], mime_type) == 0 && i % 2 == 1) {
         return MIME[i - 1];
     } else {
         return NULL;
