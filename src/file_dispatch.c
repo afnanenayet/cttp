@@ -69,7 +69,7 @@ char *read_file_to_str(char *filepath)
  * extension in the file path string). The string returned here is static
  * and IS NOT allocated, and thus will not need to be freed. Will return
  * NULL if the string is not a valid file extension (e.g. a file extension
- * that's supposrted by the server).
+ * that's supported by the server).
  */
 const char *get_mime_from_file(char *fp_str)
 {
@@ -77,12 +77,18 @@ const char *get_mime_from_file(char *fp_str)
         return NULL;
 
     char *delim = ".";
+    char *tok;
 
     // copying the string because strtok is destructive
     char *fp_copy = malloc(sizeof(char) * (strlen(fp_str) + 1));
     strcpy(fp_copy, fp_str);
-    char *tok = strtok(fp_copy, delim);
-    char *next;
+    char *next = strtok(fp_copy, delim);
+
+    // no extension in file path
+    if (next == NULL) {
+        free(fp_copy);
+        return NULL;
+    }
 
     // loop through ever "." in the string and see if it has a match in
     // the MIME helper. This should leave us with the last extension
