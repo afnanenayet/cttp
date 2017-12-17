@@ -23,21 +23,22 @@ enum HTTP_TYPE get_http_type(char *req)
     // copy the string so we don't destroy the original string
     char *cpy = calloc(strlen(req), sizeof(char));
     strcpy(cpy, req);
+
     // save result here so we can free the string before returning result
     enum HTTP_TYPE ret; 
 
-    char *tok = strtok(DELIM, cpy);
+    char *tok = strtok(cpy, DELIM);
 
     // Make sure that there is at least one instance of a ' '
     if (tok == NULL)
         ret = ERROR;
 
     // the http request type is the first word in the request string
-    if (strcmp(tok, "GET")) {
+    if (strcmp(tok, "GET") == 0) {
         ret = GET;
-    } else if (strcmp(tok, "PUT")) {
+    } else if (strcmp(tok, "PUT") == 0) {
         ret = PUT;
-    } else if (strcmp(tok, "POST")) {
+    } else if (strcmp(tok, "POST") == 0) {
         ret = POST;
     } else {
         ret = ERROR;
