@@ -15,7 +15,6 @@
 
 #include "request_parse.h"
 
-// TODO complete get_http_type tests
 static void get_http_type_get_test()
 {
     char *valid_get_inputs[] = {
