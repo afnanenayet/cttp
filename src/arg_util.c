@@ -34,7 +34,6 @@ void extract_args(int argc, char *argv[], cttp_args *args)
     // set defaults for args, so if something is missing, dir/port will appear
     // invalid
     args->dir = NULL;
-    args->port = -1;
 
     char *OPTS = "r:p::";
     int opt = 0;
