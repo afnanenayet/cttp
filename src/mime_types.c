@@ -11,8 +11,9 @@
  *   string
  */
 
-#include "mime_types.h"
 #include <string.h> // using string instead of strings for portability
+
+#include "mime_types.h"
 
 /****** public variables ******/
 
@@ -48,7 +49,7 @@ const char *ext_to_mime(char *ext)
 
     // need to make sure that the string is valid/in the array and that the
     // given string is an extension
-    if (strcmp(MIME[i], ext) == 0 && i % 2 == 0) {
+    if (MIME[i] != NULL && i % 2 == 0) {
         return MIME[i + 1];
     } else {
         return NULL;
@@ -77,7 +78,7 @@ const char *mime_to_ext(char *mime_type)
     // The extension precedes the mime type in the array, which is why
     // we return the string at i-1
     // (mime types are in the odd indices)
-    if (strcmp(MIME[i], mime_type) == 0 && i % 2 == 1) {
+    if (MIME[i] != NULL && i % 2 == 1) {
         return MIME[i - 1];
     } else {
         return NULL;
