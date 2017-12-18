@@ -7,6 +7,8 @@
  *   - extract_args: extracts arguments from the command line and attempts to
  *     convert them to their proper types
  *   - verify_args: verifies that the arguments are valid
+ *   - str_to_port: given a string, attempts to convert it to an integer
+ *       representing a port
  */
 
 #include <stdbool.h>
@@ -15,9 +17,6 @@
 #include <errno.h>
 #include "file_dispatch.h"
 #include "arg_util.h"
-
-/****** public struct definitions ******/
-
 
 /****** private function prorotypes ******/
 
@@ -32,6 +31,11 @@ static int str_to_port(char *port_str);
  */
 void extract_args(int argc, char *argv[], cttp_args *args)
 {
+    // set defaults for args, so if something is missing, dir/port will appear
+    // invalid
+    args->dir = NULL;
+    args->port = -1;
+
     char *OPTS = "r:p::";
     int opt = 0;
     int tmp_port = 8080;
@@ -57,11 +61,8 @@ void extract_args(int argc, char *argv[], cttp_args *args)
  */
 bool verify_args(cttp_args *args)
 {
-    int port = args->port;
-    char *path = args->dir;
-
     // check validity of the port
-    if (port <= -1 || !is_valid_dir(path))
+    if (args->port <= -1 || !is_valid_dir(args->dir))
         return false;
     else
         return true;
