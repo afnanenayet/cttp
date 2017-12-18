@@ -55,6 +55,46 @@ static void test_invalid_file()
     assert_int_equal(is_valid_file(invalid_file), false);
 }
 
+static void test_read_file_to_str()
+{
+    // TODO
+}
+
+static void test_get_mime_from_file()
+{
+    char *inputs[] = {
+        "/some/file/path/file.txt", // txt
+        "some/file/path/file.html", // html
+        "file.html", // html
+        ".html",
+    };
+
+    char *bad_inputs[] = {
+        "",
+        ".badext",
+        "some_file_with_no_ext",
+        NULL,
+    };
+
+    char *expected[] = {
+        "text/plain",
+        "text/html",
+        "text/html",
+        "text/html",
+    };
+
+    const int num_good_in = 4; // the number of inputs
+    const int num_bad_in = 4;
+
+    for (int i = 0; i < num_good_in; i++) {
+        assert_string_equal(get_mime_from_file(inputs[i]), expected[i]);
+    }
+
+    for (int i = 0; i < num_bad_in; i++) {
+        assert_null(get_mime_from_file(bad_inputs[i]));
+    }
+}
+
 int main(void)
 {
     const struct CMUnitTest tests[] =
@@ -63,6 +103,8 @@ int main(void)
         cmocka_unit_test(test_invalid_dir),
         cmocka_unit_test(test_valid_file),
         cmocka_unit_test(test_invalid_file),
+        cmocka_unit_test(test_read_file_to_str),
+        cmocka_unit_test(test_get_mime_from_file),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
