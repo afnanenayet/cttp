@@ -17,10 +17,10 @@
 /****** public variables ******/
 
 const char *MIME[] = {
-    ".html", "text/html",       ".htm", "text/html",     ".css", "text/css",
-    ".gif",  "image/gif",       ".png", "image/png",     ".jpg", "image/jpeg",
-    ".xml",  "application/xml", ".svg", "image/svg+xml", ".txt", "text/plain",
-    NULL // terminating NULL so we don't have to keep track of array size
+    "html", "text/html",       "htm", "text/html",     "css", "text/css",
+    "gif",  "image/gif",       "png", "image/png",     "jpg", "image/jpeg",
+    "xml",  "application/xml", "svg", "image/svg+xml", "txt", "text/plain",
+    NULL, // terminating NULL so we don't have to keep track of array size
 };
 
 /******* public function definitions ******/
@@ -48,7 +48,7 @@ const char *ext_to_mime(char *ext)
 
     // need to make sure that the string is valid/in the array and that the
     // given string is an extension
-    if (strcmp(MIME[i], ext) && i % 2 == 0) {
+    if (strcmp(MIME[i], ext) == 0 && i % 2 == 0) {
         return MIME[i + 1];
     } else {
         return NULL;
