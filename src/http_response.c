@@ -63,10 +63,17 @@ char *create_http_response(char *fp_str)
     if (!is_valid_file(fp_str))
         return NULL;
 
+    char *mime_str = (char*) get_mime_from_file(fp_str);
+
+    // set default type to text
+    if (mime_str == NULL)
+        mime_str = "text/plain";
+
     // The constants/template for each line of the HTTP response
-    char *header = "HTTP/1.1 200 OK \r\n"
-        "Content-Type: text/plain \r\n"
-        "Content-Length: ";
+    char *header = "HTTP/1.1 200 OK \r\n";
+    char *content_type = "Content-Type: ";
+    char *content_len_prefix = "Content-Length: ";
+    char *sep = "\r\n\r\n";
 
     // the HTTP response string to be returned
     char *resp;
@@ -76,18 +83,21 @@ char *create_http_response(char *fp_str)
 
     if (file_str != NULL) {
         // concatenate the two strings (header and content)
-        char *sep = "\r\n\r\n";
         int content_len = strlen(file_str) + strlen(sep);
         int num_len = num_digits(content_len + 1);
 
         resp = malloc(sizeof(char) * (
-                    strlen(header) + 1 +
-                    strlen(file_str) + 1 +
-                    strlen(sep) + 1 +
-                    strlen(sep) + 1 +
+                    strlen(header) +
+                    strlen(content_type) +
+                    strlen(mime_str) +
+                    strlen(content_len_prefix) +
+                    strlen(file_str) +
+                    strlen(sep) +
+                    strlen(sep) +
                     num_len + 1
                 ));
-        sprintf(resp, "%s%d%s%s%s", header, content_len, sep, file_str, sep);
+        sprintf(resp, "%s%s%s\r\n%s%d%s%s%s", header, content_type, mime_str,
+                content_len_prefix, content_len, sep, file_str, sep);
         free(file_str);
         return resp;
     } else {
