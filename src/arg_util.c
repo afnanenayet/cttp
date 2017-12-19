@@ -34,10 +34,10 @@ void extract_args(int argc, char *argv[], cttp_args *args)
     // set defaults for args, so if something is missing, dir/port will appear
     // invalid
     args->dir = NULL;
+    args->port = 8080;
 
     char *OPTS = "r:p::";
     int opt = 0;
-    int tmp_port = 8080;
 
     // loop through commands while they're there
     while ((opt = getopt(argc, argv, OPTS)) != -1)
@@ -47,7 +47,7 @@ void extract_args(int argc, char *argv[], cttp_args *args)
                 break;
             case 'p':
                 // if str_to_port fails, the port will be -1
-                tmp_port = str_to_port(optarg);
+                int tmp_port = str_to_port(optarg);
                 args->port = tmp_port;
                 break;
         }
