@@ -25,8 +25,7 @@ enum HTTP_TYPE get_http_type(char *req)
     strcpy(cpy, req);
 
     // save result here so we can free the string before returning result
-    enum HTTP_TYPE ret; 
-
+    enum HTTP_TYPE ret;
     char *tok = strtok(cpy, DELIM);
 
     // Make sure that there is at least one instance of a ' '
