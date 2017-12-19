@@ -92,5 +92,5 @@ specifiying the base path in the arguments.
 
 - [x] robust unit testing
 - [x] multiple MIME types
-- [] multithreading -- top priority at the moment
-- [] binary file support
+- [ ] multithreading -- top priority at the moment
+- [ ] binary file support
