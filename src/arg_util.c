@@ -47,8 +47,7 @@ void extract_args(int argc, char *argv[], cttp_args *args)
                 break;
             case 'p':
                 // if str_to_port fails, the port will be -1
-                int tmp_port = str_to_port(optarg);
-                args->port = tmp_port;
+                args->port = str_to_port(optarg);
                 break;
         }
 }
