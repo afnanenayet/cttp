@@ -90,7 +90,7 @@ specifiying the base path in the arguments.
 
 ## Roadmap
 
-[x] robust unit testing
-[x] multiple MIME types
-[] multithreading -- top priority at the moment
-[] binary file support
+- [x] robust unit testing
+- [x] multiple MIME types
+- [] multithreading -- top priority at the moment
+- [] binary file support
