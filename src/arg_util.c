@@ -69,10 +69,15 @@ bool verify_args(cttp_args *args)
 /****** private function definitions ******/
 
 /* given a string representing the port, returns the representation
- * of the port or returns -1 if the string is not parseable
+ * of the port or returns -1 if the string is not parseable. If 
+ * the port str is null or if there is an error, the function will 
+ * return NULL.
  */
 static int str_to_port(char *port_str)
 {
+    if (port_str == NULL)
+        return -1;
+
     // Convert port to long
     errno = 0;
     char *endptr;
