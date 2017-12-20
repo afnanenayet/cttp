@@ -94,7 +94,7 @@ char *create_http_response(char *fp_str)
                     strlen(file_str) +
                     strlen(sep) +
                     strlen(sep) +
-                    num_len + 1
+                    num_len + 9
                 ));
         sprintf(resp, "%s%s%s\r\n%s%d%s%s%s", header, content_type, mime_str,
                 content_len_prefix, content_len, sep, file_str, sep);
