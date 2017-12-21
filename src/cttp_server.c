@@ -214,11 +214,17 @@ int cttp_server_run(int port, const char *root)
         if (req != NULL) {
             char *base_path = get_req_path(GET, req);
 
+            if (base_path == NULL)
+                break;
+
             // find the file if it's valid, then serve it as a response
             // concatenate base path with new path
-            char *full_fp_str = malloc(strlen(root) + strlen(base_path) + 2);
+            char *full_fp_str = calloc(strlen(root) + strlen(base_path) + 2, sizeof(char));
             strcpy(full_fp_str, root);
             strcat(full_fp_str, base_path);
+
+            if (full_fp_str == NULL)
+                break;
 
             printf("File %s requested...\n", full_fp_str);
             char *resp = create_http_response(full_fp_str);
