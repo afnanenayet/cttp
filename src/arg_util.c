@@ -36,7 +36,8 @@ void extract_args(int argc, char *argv[], cttp_args *args)
     args->dir = NULL;
     args->port = 8080;
 
-    char *OPTS = "r:p::";
+    opterr = 0; // need to reset this just in case optarg had errors anywhere else
+    char *OPTS = "r:p:";
     int opt = 0;
 
     // loop through commands while they're there
@@ -50,6 +51,7 @@ void extract_args(int argc, char *argv[], cttp_args *args)
                 args->port = str_to_port(optarg);
                 break;
         }
+    opterr = 0;
 }
 
 /* Given a cttp_args struct, verifies the data, returning a boolean value
