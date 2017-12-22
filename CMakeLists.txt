@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -pedantic -Wmi
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -o2 -std=c11")
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
-    set(CMAKE_VERBOSE_MAKEFILE ON)
+    # set(CMAKE_VERBOSE_MAKEFILE ON)
     enable_testing()
     add_subdirectory(test)
 ENDIF(CMAKE_BUILD_TYPE MATCHES Debug)
