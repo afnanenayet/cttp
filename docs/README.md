@@ -83,7 +83,9 @@ required.
 ### Return codes
 
 - 0: success/no errors
-- 1: invalid arguments
+- 1: invalid arguments/generic argument error
+- 2: networking error
+- 3: unknown error
 
 Note that this program will follow symbolic links, both for requests and when
 specifiying the base path in the arguments.
