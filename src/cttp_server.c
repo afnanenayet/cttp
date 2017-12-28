@@ -276,7 +276,7 @@ int cttp_server_run(int port, const char *root)
         int incoming_sock_fd = accept(server_sock_fd, (struct sockaddr*) &client_addr,
                 &client_len);
         pthread_t worker_thr;
-        
+
         // Args that need to be passed to the dispatched thread
         struct cttp_worker_args *thr_args = malloc(sizeof(struct cttp_worker_args));
 
