@@ -195,6 +195,7 @@ void *cttp_resp_worker(void *args)
     char *http_req = network_req_str(in_sock);
 
     if (http_req == NULL || server.stat != 0) {
+        free(w_args);
         close(in_sock);
         return NULL;
     }
@@ -204,6 +205,7 @@ void *cttp_resp_worker(void *args)
     char *base_path = get_req_path(GET, http_req);
 
     if (base_path == NULL || server.stat != 0) {
+        free(w_args);
         free(http_req);
         close(in_sock);
         return NULL;
@@ -219,6 +221,7 @@ void *cttp_resp_worker(void *args)
     printf("\nFile \"%s\" requested\n", full_fp_str);
 
     if (full_fp_str == NULL || server.stat != 0) {
+        free(w_args);
         free(http_req);
         close(in_sock);
         return NULL;
@@ -238,6 +241,7 @@ void *cttp_resp_worker(void *args)
     free(http_req);
     free(base_path);
     free(full_fp_str);
+    free(w_args);
     close(in_sock);
     return NULL;
 }
