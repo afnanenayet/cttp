@@ -226,7 +226,7 @@ int cttp_server_run(int port, const char *root)
             if (full_fp_str == NULL)
                 break;
 
-            printf("File %s requested...\n", full_fp_str);
+            printf("File \"%s\" requested...\n", full_fp_str);
             char *resp = create_http_response(full_fp_str);
 
             // if we have a valid response, send it to the client
