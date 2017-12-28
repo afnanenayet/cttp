@@ -18,6 +18,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <signal.h>
+#include <pthread.h>
 #include "request_parse.h"
 #include "return_codes.h"
 #include "file_dispatch.h"
@@ -26,7 +27,7 @@
 
 /****** private constants ******/
 
-// buffer size allocated for reading network requests
+// buffer size allocated for reading network requests. At 64k for now
 const unsigned int REQ_BUF_SIZE = 64000;
 
 /****** private struct definitions ******/
