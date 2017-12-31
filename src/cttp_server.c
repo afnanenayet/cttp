@@ -125,16 +125,19 @@ static char *ip_addr_str(struct sockaddr_in *addr)
     // determining whether socket address is IPv4 or IPv6
     switch(addr->sin_family) {
         case AF_INET: {
-                          struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;
+                          struct sockaddr_in *addr_in = (struct sockaddr_in *)
+                              addr;
                           ip_str = malloc(INET_ADDRSTRLEN);
-                          inet_ntop(AF_INET, &(addr_in->sin_addr), ip_str, INET_ADDRSTRLEN);
+                          inet_ntop(AF_INET, &(addr_in->sin_addr), ip_str,
+                                  INET_ADDRSTRLEN);
                           break;
                       }
         case AF_INET6:
-                      {
-                          struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *) addr;
+                      { struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *)
+                          addr;
                           ip_str = malloc(INET6_ADDRSTRLEN);
-                          inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str, INET6_ADDRSTRLEN);
+                          inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str,
+                                  INET6_ADDRSTRLEN);
                           break;
                       }
         default:
@@ -213,7 +216,8 @@ void *cttp_resp_worker(void *args)
 
     // find the file if it's valid, then serve it as a response
     // concatenate base path with new path
-    char *full_fp_str = calloc(strlen(root) + strlen(base_path) + 2, sizeof(char));
+    char *full_fp_str = calloc(strlen(root) + strlen(base_path) + 2,
+            sizeof(char));
     strcpy(full_fp_str, root);
     strcat(full_fp_str, base_path);
 
@@ -277,12 +281,13 @@ int cttp_server_run(int port, const char *root)
         // When a client socket is accepted, spawn a new thread.
         // In that thread, do all the work related to creating and sending
         // an HTTP response
-        int incoming_sock_fd = accept(server_sock_fd, (struct sockaddr*) &client_addr,
-                &client_len);
+        int incoming_sock_fd = accept(server_sock_fd,
+                (struct sockaddr*) &client_addr, &client_len);
         pthread_t worker_thr;
 
         // Args that need to be passed to the dispatched thread
-        struct cttp_worker_args *thr_args = malloc(sizeof(struct cttp_worker_args));
+        struct cttp_worker_args *thr_args = malloc(sizeof(struct
+                    cttp_worker_args));
 
         if (thr_args == NULL || server.stat != 0) {
             close(incoming_sock_fd);
