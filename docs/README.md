@@ -94,5 +94,7 @@ specifiying the base path in the arguments.
 
 [x] robust unit testing
 [x] multiple MIME types
-[] multithreading -- top priority at the moment
-[] binary file support
+[x] multithreading -- top priority at the moment
+[ ] better DDOS protection (limiting threadpools, blocking rapid repeated
+connections)
+[ ] binary file support
