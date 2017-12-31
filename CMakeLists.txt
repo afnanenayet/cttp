@@ -16,7 +16,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -pedantic -Wmi
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -o2 -std=c11")
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
-    # set(CMAKE_VERBOSE_MAKEFILE ON)
     enable_testing()
     add_subdirectory(test)
 ENDIF(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -24,7 +23,7 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES Debug)
 include_directories(include)
 file(GLOB sources "src/*.c")
 add_executable(${program_name} ${sources})
-target_link_libraries(${program_name} m)
+target_link_libraries(${program_name} m pthread)
 set_property(TARGET ${program_name} PROPERTY C_STANDARD 11)
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
