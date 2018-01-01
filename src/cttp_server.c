@@ -297,7 +297,13 @@ int cttp_server_run(int port, const char *root)
         thr_args->fp_root = root;
         thr_args->in_sock = incoming_sock_fd;
 
-        if (pthread_create(&worker_thr, NULL, &cttp_resp_worker,
+        // We don't need the thread to connect to the main program, so create
+        // as detached
+        pthread_attr_t attr;
+        int rc = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+
+
+        if (rc != 0 || pthread_create(&worker_thr, &attr, &cttp_resp_worker,
                     thr_args) != 0) {
             free(thr_args);
             fprintf(stderr, "Failed to create worker thread to dispatch HTTP "
