@@ -93,9 +93,9 @@ specifiying the base path in the arguments.
 
 ## Roadmap
 
-[x] robust unit testing
-[x] multiple MIME types
-[x] multithreading -- top priority at the moment
-[ ] better DDOS protection (limiting threadpools, blocking rapid repeated
+- [x] robust unit testing
+- [x] multiple MIME types
+- [x] multithreading -- top priority at the moment
+- [ ] better DDOS protection (limiting threadpools, blocking rapid repeated
 connections)
-[ ] binary file support
+- [ ] binary file support
