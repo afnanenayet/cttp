@@ -1,6 +1,6 @@
 # build script for cttp
 # will build with gmake if on OSX since the distributed make binary is fairly
-# old
+# old. This builds the debug configuration
 
 platform="unknown"
 uname_str="$(uname)"
@@ -28,4 +28,4 @@ fi
 
 echo "Building cttp for platform: $uname_str with make: $make"
 
-cmake . && "$make" -j
+cmake . -DCMAKE_BUILD_TYPE=Debug && "$make" -j

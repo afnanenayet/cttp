@@ -4,16 +4,17 @@
 
 ## Synopsis
 
-`cttp` is a simple, static HTTP 1.1 server written in C. It was created for the sake of
-personal edification. I used [RFC 2616](https://tools.ietf.org/html/rfc2616) and
+`cttp` is a multithreaded, static HTTP 1.1 server written in C. It was created
+for the sake of personal edification. I used
+[RFC 2616](https://tools.ietf.org/html/rfc2616) and
 the [Wikipedia page](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) as
 references to help guide me in creating this project. I also drew inspiration from
-this [reddit post](https://www.reddit.com/r/dailyprogrammer/comments/6lti17/20170707_challenge_322_hard_static_http_server/)
+this
+[reddit post](https://www.reddit.com/r/dailyprogrammer/comments/6lti17/20170707_challenge_322_hard_static_http_server/)
 
 Right now, the project is stable. It has the basic functionality of an HTTP
 server--it can serve websites from a given directory and serve different
-types of files. However, it does not support serving binary files and is
-currently single-threaded, making it very easy to DDOS.
+types of files. `cttp` does not support serving binary files (yet).
 
 ### Structure
 
@@ -83,14 +84,18 @@ required.
 ### Return codes
 
 - 0: success/no errors
-- 1: invalid arguments
+- 1: invalid arguments/generic argument error
+- 2: networking error
+- 3: unknown error
 
 Note that this program will follow symbolic links, both for requests and when
 specifiying the base path in the arguments.
 
 ## Roadmap
 
-- [x] robust unit testing
-- [x] multiple MIME types
-- [ ] multithreading -- top priority at the moment
-- [ ] binary file support
+[x] robust unit testing
+[x] multiple MIME types
+[x] multithreading -- top priority at the moment
+[ ] better DDOS protection (limiting threadpools, blocking rapid repeated
+connections)
+[ ] binary file support

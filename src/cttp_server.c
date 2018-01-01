@@ -18,6 +18,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <signal.h>
+#include <pthread.h>
 #include "request_parse.h"
 #include "return_codes.h"
 #include "file_dispatch.h"
@@ -26,7 +27,7 @@
 
 /****** private constants ******/
 
-// buffer size allocated for reading network requests
+// buffer size allocated for reading network requests. At 64k for now
 const unsigned int REQ_BUF_SIZE = 64000;
 
 /****** private struct definitions ******/
@@ -36,6 +37,12 @@ const unsigned int REQ_BUF_SIZE = 64000;
 struct socket_sockfd {
     struct sockaddr_in *sa_ptr;
     int sockfd;
+};
+
+// Struct that holds arguments for thread dispatch function
+struct cttp_worker_args {
+    int in_sock;
+    const char *fp_root;
 };
 
 // For historical reasons, the signal handling callback function cannot accept
@@ -56,7 +63,8 @@ static void sig_handler(int signum);
 static int bind_addr(int port);
 static bool unbind_addr(int sock_fd);
 static char *ip_addr_str(struct sockaddr_in *addr);
-static char *network_request_string(int sockfd);
+static char *network_req_str(int sock_fd);
+void *cttp_resp_worker(void *args);
 
 /****** private function definitions ******/
 
@@ -117,16 +125,19 @@ static char *ip_addr_str(struct sockaddr_in *addr)
     // determining whether socket address is IPv4 or IPv6
     switch(addr->sin_family) {
         case AF_INET: {
-                          struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;
+                          struct sockaddr_in *addr_in = (struct sockaddr_in *)
+                              addr;
                           ip_str = malloc(INET_ADDRSTRLEN);
-                          inet_ntop(AF_INET, &(addr_in->sin_addr), ip_str, INET_ADDRSTRLEN);
+                          inet_ntop(AF_INET, &(addr_in->sin_addr), ip_str,
+                                  INET_ADDRSTRLEN);
                           break;
                       }
         case AF_INET6:
-                      {
-                          struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *) addr;
+                      { struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *)
+                          addr;
                           ip_str = malloc(INET6_ADDRSTRLEN);
-                          inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str, INET6_ADDRSTRLEN);
+                          inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str,
+                                  INET6_ADDRSTRLEN);
                           break;
                       }
         default:
@@ -141,38 +152,22 @@ static char *ip_addr_str(struct sockaddr_in *addr)
  * string. If there is an error or if the socket file descriptor is invalid,
  * it will return NULL. The returned string must be freed unless it is NULL.
  */
-static char *network_request_str(int sock_fd)
+static char *network_req_str(int sock_fd)
 {
     // invalid socket file descriptor
     if (sock_fd < 0)
         return NULL;
 
-    struct sockaddr_in client_addr;
-    socklen_t client_len = sizeof(client_addr);
-    listen(sock_fd, 5);  // start listening
-
-    if (server.stat != 0)
-        return NULL;
-
     // 64K buffer for reading network request
-    // Allocating this down here because if program is terminated beforehand,
-    // we don't need to allocate it at all
     char *buf = calloc(REQ_BUF_SIZE, sizeof(char));
-    int incoming_sock_fd = accept(sock_fd, (struct sockaddr *) &client_addr,
-            &client_len);
 
-    if (incoming_sock_fd < 0 || server.stat != 0) {
+    if (server.stat != 0) {
         free(buf);
-        fprintf(stderr, "error accepting socket\n");
         return NULL;
     }
 
-    // Set global so that the socket can be closed outside of this function
-    // on SIGTERM or after writing a response
-    server.client_sock = incoming_sock_fd;
-
     // Otherwise, read into buffer
-    int n = read(incoming_sock_fd, buf, REQ_BUF_SIZE-1);
+    int n = read(sock_fd, buf, REQ_BUF_SIZE-1);
 
     // if we were able to read, return the string, otherwise free the buffer
     // and return NULL, indicating an error
@@ -182,6 +177,77 @@ static char *network_request_str(int sock_fd)
         free(buf);
         return NULL;
     }
+}
+
+/* Dispatched as a pthread to serve a response to an HTTP request
+ * asynchronously
+ *
+ * Params:
+ *   - args: incoming socket (int)
+ */
+void *cttp_resp_worker(void *args)
+{
+    struct cttp_worker_args *w_args = (struct cttp_worker_args*) args;
+    int in_sock = w_args->in_sock;
+    const char *root = w_args->fp_root;
+
+    // Check that program is still running and that socket is valid
+    if (in_sock < 0 || server.stat != 0 || root == NULL)
+        return NULL;
+
+    char *http_req = network_req_str(in_sock);
+
+    if (http_req == NULL || server.stat != 0) {
+        free(w_args);
+        close(in_sock);
+        return NULL;
+    }
+
+    // If http request is valid, dispatch a response
+    // attempt to find the file that's being requested from the HTTP response
+    char *base_path = get_req_path(GET, http_req);
+
+    if (base_path == NULL || server.stat != 0) {
+        free(w_args);
+        free(http_req);
+        close(in_sock);
+        return NULL;
+    }
+
+    // find the file if it's valid, then serve it as a response
+    // concatenate base path with new path
+    char *full_fp_str = calloc(strlen(root) + strlen(base_path) + 2,
+            sizeof(char));
+    strcpy(full_fp_str, root);
+    strcat(full_fp_str, base_path);
+
+    // UI
+    printf("\nFile \"%s\" requested\n", full_fp_str);
+
+    if (full_fp_str == NULL || server.stat != 0) {
+        free(w_args);
+        free(http_req);
+        close(in_sock);
+        return NULL;
+    }
+
+    // Creating HTTP response string and dispatching back to caller
+    char *resp = create_http_response(full_fp_str);
+
+    // if we have a valid response, send it to the client
+    if (resp != NULL) {
+        printf("...File sent\n");
+        write(in_sock, resp, strlen(resp) + 1);
+        free(resp);
+    }
+
+    // Clean up resources
+    free(http_req);
+    free(base_path);
+    free(full_fp_str);
+    free(w_args);
+    close(in_sock);
+    return NULL;
 }
 
 /****** public function definitions ******/
@@ -205,34 +271,46 @@ int cttp_server_run(int port, const char *root)
     if (server_sock_fd < 0)
         return RET_NET_ERROR;
 
+    // Listening at socket for incoming connections
+    struct sockaddr_in client_addr;
+    socklen_t client_len = sizeof(client_addr);
+    listen(server_sock_fd, 5);
+
     // Listen for incoming connections
-    // TODO, spawn new thread for each network request
     while (server.stat == 0) {
-        char *req = network_request_str(server_sock_fd);
+        // When a client socket is accepted, spawn a new thread.
+        // In that thread, do all the work related to creating and sending
+        // an HTTP response
+        int incoming_sock_fd = accept(server_sock_fd,
+                (struct sockaddr*) &client_addr, &client_len);
+        pthread_t worker_thr;
 
-        // NULL indicates error reading request
-        if (req != NULL) {
-            char *base_path = get_req_path(GET, req);
+        // Args that need to be passed to the dispatched thread
+        struct cttp_worker_args *thr_args = malloc(sizeof(struct
+                    cttp_worker_args));
 
-            // find the file if it's valid, then serve it as a response
-            // concatenate base path with new path
-            char *full_fp_str = malloc(strlen(root) + strlen(base_path) + 2);
-            strcpy(full_fp_str, root);
-            strcat(full_fp_str, base_path);
+        if (thr_args == NULL || server.stat != 0) {
+            close(incoming_sock_fd);
+            fprintf(stderr, "Possibly failed to allocate thr_args");
+            break;
+        }
 
-            printf("File %s requested...\n", full_fp_str);
-            char *resp = create_http_response(full_fp_str);
+        thr_args->fp_root = root;
+        thr_args->in_sock = incoming_sock_fd;
 
-            // if we have a valid response, send it to the client
-            if (resp != NULL) {
-                printf("...File sent\n");
-                write(server.client_sock, resp, strlen(resp) + 1);
-                free(resp);
-            }
+        // We don't need the thread to connect to the main program, so create
+        // as detached
+        pthread_attr_t attr;
+        int rc = pthread_attr_init(&attr);
+        rc = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
-            close(server.client_sock);
-            free(base_path);
-            free(req);
+
+        if (rc != 0 || pthread_create(&worker_thr, &attr, &cttp_resp_worker,
+                    thr_args) != 0) {
+            close(incoming_sock_fd);
+            free(thr_args);
+            fprintf(stderr, "Failed to create worker thread to dispatch HTTP "
+                    "response\n");
         }
     }
 

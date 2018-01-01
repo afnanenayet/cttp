@@ -59,7 +59,7 @@ char *read_file_to_str(char *filepath)
     rewind(fp); // rewind to read from the beginning
 
     // read file into allocated buffer
-    char *file_str = calloc(file_size, sizeof(char));
+    char *file_str = calloc(file_size + 1, sizeof(char));
     fread(file_str, sizeof(char), file_size, fp);
     fclose(fp);
     return file_str;
@@ -80,7 +80,7 @@ const char *get_mime_from_file(char *fp_str)
     char *tok;
 
     // copying the string because strtok is destructive
-    char *fp_copy = malloc(sizeof(char) * (strlen(fp_str) + 1));
+    char *fp_copy = calloc(strlen(fp_str) + 1, sizeof(char));
     strcpy(fp_copy, fp_str);
     char *next = strtok(fp_copy, delim);
 

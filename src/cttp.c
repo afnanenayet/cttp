@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
         return ret_code;
     } else {
         print_usage();
-        return RET_ARG_ERROR;
+        ret_code = RET_ARG_ERROR;
     }
     return ret_code;
 }
