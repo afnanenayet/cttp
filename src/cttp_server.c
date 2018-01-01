@@ -291,6 +291,7 @@ int cttp_server_run(int port, const char *root)
 
         if (thr_args == NULL || server.stat != 0) {
             close(incoming_sock_fd);
+            fprintf(stderr, "Possibly failed to allocate thr_args");
             break;
         }
 
@@ -300,11 +301,13 @@ int cttp_server_run(int port, const char *root)
         // We don't need the thread to connect to the main program, so create
         // as detached
         pthread_attr_t attr;
-        int rc = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+        int rc = pthread_attr_init(&attr);
+        rc = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
 
         if (rc != 0 || pthread_create(&worker_thr, &attr, &cttp_resp_worker,
                     thr_args) != 0) {
+            close(incoming_sock_fd);
             free(thr_args);
             fprintf(stderr, "Failed to create worker thread to dispatch HTTP "
                     "response\n");
