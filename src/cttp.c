@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
     // otherwise start main program
     if (verify_args(&args)) {
         ret_code = cttp_server_run(args.port, args.dir);
-        return ret_code;
     } else {
         print_usage();
         ret_code = RET_ARG_ERROR;
