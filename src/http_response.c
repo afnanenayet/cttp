@@ -4,17 +4,19 @@
  * to send to an HTTP client.
  */
 
+#include "http_response.h"
+#include "file_dispatch.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include "file_dispatch.h"
-#include "http_response.h"
 
 /****** private function prototypes ******/
 
-static char *concat_str_end(char *template, char *text);
-static int num_digits(int num);
+static char*
+concat_str_end(char* template, char* text);
+static int
+num_digits(int num);
 
 /****** private function definitions ******/
 
@@ -24,28 +26,29 @@ static int num_digits(int num);
  * new string that must be freed by the caller. Will return NULL
  * on error.
  */
-static char *concat_str_end(char *template, char *text)
+static char*
+concat_str_end(char* template, char* text)
 {
-    if (template == NULL || text == NULL)
-        return NULL;
+  if (template == NULL || text == NULL)
+    return NULL;
 
-    char *terminator = "\r\n";
-    char *res = malloc(strlen(template) + strlen(text) + strlen(terminator)
-            + 3);
-    strcpy(res, template);
-    strcat(res, text);
-    strcat(res, terminator);
-    return res;
+  char* terminator = "\r\n";
+  char* res = malloc(strlen(template) + strlen(text) + strlen(terminator) + 3);
+  strcpy(res, template);
+  strcat(res, text);
+  strcat(res, terminator);
+  return res;
 }
 
 /* Returns the number of digits in a number
  */
-static int num_digits(int num)
+static int
+num_digits(int num)
 {
-    if (num == 0)
-        return 1;
-    else
-        return floor(log10(abs(num))) + 1;
+  if (num == 0)
+    return 1;
+  else
+    return floor(log10(abs(num))) + 1;
 }
 
 /****** public function definitions ******/
@@ -55,52 +58,55 @@ static int num_digits(int num)
  * Otherwise, the string return is dynamically allocated and will need to
  * be freed by the caller.
  */
-char *create_http_response(char *fp_str)
+char*
+create_http_response(char* fp_str)
 {
-    if (fp_str == NULL)
-        return NULL;
+  if (fp_str == NULL)
+    return NULL;
 
-    if (!is_valid_file(fp_str))
-        return NULL;
+  if (!is_valid_file(fp_str))
+    return NULL;
 
-    char *mime_str = (char*) get_mime_from_file(fp_str);
+  char* mime_str = (char*)get_mime_from_file(fp_str);
 
-    // set default type to text
-    if (mime_str == NULL)
-        mime_str = "text/plain";
+  // set default type to text
+  if (mime_str == NULL)
+    mime_str = "text/plain";
 
-    // The constants/template for each line of the HTTP response
-    char *header = "HTTP/1.1 200 OK \r\n";
-    char *content_type = "Content-Type: ";
-    char *content_len_prefix = "Content-Length: ";
-    char *sep = "\r\n\r\n";
+  // The constants/template for each line of the HTTP response
+  char* header = "HTTP/1.1 200 OK \r\n";
+  char* content_type = "Content-Type: ";
+  char* content_len_prefix = "Content-Length: ";
+  char* sep = "\r\n\r\n";
 
-    // the HTTP response string to be returned
-    char *resp;
+  // the HTTP response string to be returned
+  char* resp;
 
-    // get the string representation of the file, if the file is valid
-    char *file_str = read_file_to_str(fp_str);
+  // get the string representation of the file, if the file is valid
+  char* file_str = read_file_to_str(fp_str);
 
-    if (file_str != NULL) {
-        // concatenate the two strings (header and content)
-        int content_len = strlen(file_str) + strlen(sep);
-        int num_len = num_digits(content_len + 1);
+  if (file_str != NULL) {
+    // concatenate the two strings (header and content)
+    int content_len = strlen(file_str) + strlen(sep);
+    int num_len = num_digits(content_len + 1);
 
-        resp = malloc(sizeof(char) * (
-                    strlen(header) +
-                    strlen(content_type) +
-                    strlen(mime_str) +
-                    strlen(content_len_prefix) +
-                    strlen(file_str) +
-                    strlen(sep) +
-                    strlen(sep) +
-                    num_len + 9
-                ));
-        sprintf(resp, "%s%s%s\r\n%s%d%s%s%s", header, content_type, mime_str,
-                content_len_prefix, content_len, sep, file_str, sep);
-        free(file_str);
-        return resp;
-    } else {
-        return NULL;
-    }
+    resp = malloc(sizeof(char) *
+                  (strlen(header) + strlen(content_type) + strlen(mime_str) +
+                   strlen(content_len_prefix) + strlen(file_str) + strlen(sep) +
+                   strlen(sep) + num_len + 9));
+    sprintf(resp,
+            "%s%s%s\r\n%s%d%s%s%s",
+            header,
+            content_type,
+            mime_str,
+            content_len_prefix,
+            content_len,
+            sep,
+            file_str,
+            sep);
+    free(file_str);
+    return resp;
+  } else {
+    return NULL;
+  }
 }

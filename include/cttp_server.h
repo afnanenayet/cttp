@@ -16,6 +16,7 @@
  * - port: the port to serve from
  * - root: the name of the root directory to serve files from
  */
-int cttp_server_run(int port, const char *root);
+int
+cttp_server_run(int port, const char* root);
 
 #endif // _cttp_server_h
