@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #ifndef _ARG_UTIL_H
 #define _ARG_UTIL_H
 
