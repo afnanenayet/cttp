@@ -311,8 +311,8 @@ cttp_server_run(int port, const char* root)
     // We don't need the thread to connect to the main program, so create
     // as detached
     pthread_attr_t attr;
-    int rc = pthread_attr_init(&attr);
-    rc = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    pthread_attr_init(&attr);
+    int rc = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
     if (rc != 0 ||
         pthread_create(&worker_thr, &attr, &cttp_resp_worker, thr_args) != 0) {

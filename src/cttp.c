@@ -12,7 +12,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> // getopt
+
+// getopt
+#include <unistd.h>
 
 /****** constants ******/
 

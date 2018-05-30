@@ -4,6 +4,7 @@
  */
 
 #include "request_parse.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,8 +31,11 @@ get_http_type(char* req)
   char* tok = strtok(cpy, DELIM);
 
   // Make sure that there is at least one instance of a ' '
-  if (tok == NULL)
+  if (tok == NULL) {
     ret = ERROR;
+    free(cpy);
+    return ret;
+  }
 
   // the http request type is the first word in the request string
   if (strcmp(tok, "GET") == 0) {
@@ -66,17 +70,17 @@ get_req_path(enum HTTP_TYPE http_type, char* req)
   char* req_cpy = malloc(sizeof(char) * (strlen(req) + 1));
   strcpy(req_cpy, req);
   char* path = NULL; // the path to be returned to the user
+  bool err = false;
 
   if (http_type == ERROR) {
     fprintf(stderr, "unsupported or invallid HTTP request type\n");
-    return NULL;
   }
 
   // second token should be the path
   char* tok = strtok(req_cpy, DELIM);
 
   // just in case we get a faulty request
-  if (tok != NULL)
+  if (tok != NULL && !err)
     tok = strtok(NULL, DELIM);
   else {
     free(req_cpy);
