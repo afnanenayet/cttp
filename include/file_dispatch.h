@@ -17,21 +17,24 @@
  * an HTTP request. Also used to verify the base path from the command line
  * arguments.
  */
-bool is_valid_dir(char *dirname);
+bool
+is_valid_dir(char* dirname);
 
 /* Returns a boolean value indicating whether a given file path points to a
  * valid file. Will return false if the filepath is NULL, if the file path
  * does not point to an actual file, or if the file cannot be accessed for any
  * reason.
  */
-bool is_valid_file(char *filepath);
+bool
+is_valid_file(char* filepath);
 
 /* Will attempt to read a text file and return a string with the file's
  * contents. Will return NULL if the file path is not valid or if any
  * errors occur trying to read the file. The file string is malloc'd and
  * will have to be freed.
  */
-char *read_file_to_str(char *filepath);
+char*
+read_file_to_str(char* filepath);
 
 /* retrieves the MIME-type from a file path string (simply checks the
  * extension in the file path string). The string returned here is static
@@ -39,6 +42,7 @@ char *read_file_to_str(char *filepath);
  * NULL if the string is not a valid file extension (e.g. a file extension
  * that's supposrted by the server).
  */
-const char *get_mime_from_file(char *fp_str);
+const char*
+get_mime_from_file(char* fp_str);
 
-#endif  // _FILE_DISPATCH_H
+#endif // _FILE_DISPATCH_H

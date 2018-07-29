@@ -11,6 +11,7 @@
  * Otherwise, the string return is dynamically allocated and will need to
  * be freed by the caller.
  */
-char *create_http_response(char *fp_str);
+char*
+create_http_response(char* fp_str);
 
 #endif // _HTTP_RESPONSE_H

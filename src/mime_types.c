@@ -17,11 +17,11 @@
 
 /****** public variables ******/
 
-const char *MIME[] = {
-    "html", "text/html",       "htm", "text/html",     "css", "text/css",
-    "gif",  "image/gif",       "png", "image/png",     "jpg", "image/jpeg",
-    "xml",  "application/xml", "svg", "image/svg+xml", "txt", "text/plain",
-    NULL, // terminating NULL so we don't have to keep track of array size
+const char* MIME[] = {
+  "html", "text/html",       "htm", "text/html",     "css", "text/css",
+  "gif",  "image/gif",       "png", "image/png",     "jpg", "image/jpeg",
+  "xml",  "application/xml", "svg", "image/svg+xml", "txt", "text/plain",
+  NULL, // terminating NULL so we don't have to keep track of array size
 };
 
 /******* public function definitions ******/
@@ -35,25 +35,27 @@ const char *MIME[] = {
  *
  * returns: a mime type string (e.g. ".html" -> "text/html"
  */
-const char *ext_to_mime(char *ext)
+const char*
+ext_to_mime(char* ext)
 {
-    if (ext == NULL)
-        return NULL;
+  if (ext == NULL)
+    return NULL;
 
-    // search for the extension in the array
-    // the format of the array is extension, mime string, so the corresponding
-    // MIME type for an extension is at index i + 1 if the extension is at
-    // index i
-    int i = 0;
-    for (; MIME[i] != NULL && strcmp(MIME[i], ext) != 0; i++) { }
+  // search for the extension in the array
+  // the format of the array is extension, mime string, so the corresponding
+  // MIME type for an extension is at index i + 1 if the extension is at
+  // index i
+  int i = 0;
+  for (; MIME[i] != NULL && strcmp(MIME[i], ext) != 0; i++) {
+  }
 
-    // need to make sure that the string is valid/in the array and that the
-    // given string is an extension
-    if (MIME[i] != NULL && i % 2 == 0) {
-        return MIME[i + 1];
-    } else {
-        return NULL;
-    }
+  // need to make sure that the string is valid/in the array and that the
+  // given string is an extension
+  if (MIME[i] != NULL && i % 2 == 0) {
+    return MIME[i + 1];
+  } else {
+    return NULL;
+  }
 }
 
 /* Retrieves the extension given a MIME type string. This only applies for the
@@ -65,22 +67,24 @@ const char *ext_to_mime(char *ext)
  *
  * returns: the extension string
  */
-const char *mime_to_ext(char *mime_type)
+const char*
+mime_to_ext(char* mime_type)
 {
-    if (mime_type == NULL)
-        return NULL;
+  if (mime_type == NULL)
+    return NULL;
 
-    // Searching for the index of the mime type string in the array
-    int i = 0;
-    for (; MIME[i] != NULL && strcmp(MIME[i], mime_type) != 0; i++) { }
+  // Searching for the index of the mime type string in the array
+  int i = 0;
+  for (; MIME[i] != NULL && strcmp(MIME[i], mime_type) != 0; i++) {
+  }
 
-    // need to make sure string is valid/in the array and a MIME type
-    // The extension precedes the mime type in the array, which is why
-    // we return the string at i-1
-    // (mime types are in the odd indices)
-    if (MIME[i] != NULL && i % 2 == 1) {
-        return MIME[i - 1];
-    } else {
-        return NULL;
-    }
+  // need to make sure string is valid/in the array and a MIME type
+  // The extension precedes the mime type in the array, which is why
+  // we return the string at i-1
+  // (mime types are in the odd indices)
+  if (MIME[i] != NULL && i % 2 == 1) {
+    return MIME[i - 1];
+  } else {
+    return NULL;
+  }
 }
