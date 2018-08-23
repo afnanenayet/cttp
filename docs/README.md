@@ -48,23 +48,19 @@ is older.
     cmake . && make
 
 I run `cmake . && gmake` on MacOS because my version of GNU make tends to be
-more updated than Apple's provided binary for make. Use whatever version of
-`make` you want.
+more updated than Apple's provided binary for make. Use whatever build system
+you want.
 
 You can also use the build script on a unix-like system if you have a `bash`
-compatible shell installed. `cttp` relies on POSIX compliant behavior, so
+compatible shell installed. `cttp` relies on POSIX APIs, so
 it will not work on Windows.
 
 ### Testing
 
 I have provided a script that will build the project and run unit tests via
-CTest. Invoke it like so:
+CMocka. In order to build tests, you need to set CMake to build in debug mode.
 
-    ./build_test.sh
-
-You can also use Cmake yourself:
-
-    cmake . && make test
+    cmake -DCMAKE_RELEASE_TYPE=Debug . && make test
 
 or
 
@@ -95,7 +91,7 @@ specifiying the base path in the arguments.
 
 - [x] robust unit testing
 - [x] multiple MIME types
-- [x] multithreading -- top priority at the moment
+- [x] multithreading
 - [ ] better DDOS protection (limiting threadpools, blocking rapid repeated
 connections)
 - [ ] binary file support
